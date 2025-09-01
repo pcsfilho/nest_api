@@ -1,0 +1,20 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+// npx prisma db pull -> caso o banco ja exista são criados os models automaticamente
+model User {
+  id        Int      @id @default(autoincrement()) @db.UnsignedInt
+  name      String   @db.VarChar(65)
+  email     String   @db.VarChar(127)
+  password  String   @db.VarChar(127)
+  createdAt DateTime @default(now()) @db.Timestamp(0)
+  updatedAt DateTime @default(now()) @db.Timestamp(0)
+
+  @@map("users")
+}
