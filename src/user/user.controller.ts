@@ -12,65 +12,41 @@ import {
 import { CreateUserDTO } from "./dto/create-user.dto";
 import { UpdateUserDTO } from "./dto/update-user.dto";
 import { UpdatePatchUserDTO } from "./dto/update-patch-user.dto";
+import { UserService } from "./user.service";
 
 @Controller("users") // rota /users
 export class UserController {
+  constructor(private readonly userService: UserService) {}
   @Post()
-  async create(@Body() { name, email, password }: CreateUserDTO) {
-    return {
-      body: {
-        name,
-        email,
-        password,
-      },
-    };
+  async create(@Body() data: CreateUserDTO) {
+    return await this.userService.create(data);
   }
 
   @Get()
   async list() {
-    return { users: [] };
+    return await this.userService.list();
   }
 
   @Get(":id")
   async show(@Param("id", ParseIntPipe) id) {
-    return { user: {}, params: { id } };
+    return await this.userService.show(id);
   }
 
   @Put(":id")
-  async update(
-    @Body() { name, email, password }: UpdateUserDTO,
-    @Param("id", ParseIntPipe) id
-  ) {
-    return {
-      method: "put",
-      body: {
-        name,
-        email,
-        password,
-      },
-      params: { id },
-    };
+  async update(@Body() data: UpdateUserDTO, @Param("id", ParseIntPipe) id) {
+    return await this.userService.update(id, data);
   }
 
   @Patch(":id")
   async updatePartial(
-    @Body() { name, email, password }: UpdatePatchUserDTO,
+    @Body() data: UpdatePatchUserDTO,
     @Param("id", ParseIntPipe) id
   ) {
-    return {
-      method: "patch",
-      body: {
-        name,
-        email,
-        password,
-      },
-      params: { id },
-    };
+    return await this.userService.updatePartial(id, data);
   }
 
   @Delete(":id")
   async delete(@Param("id", ParseIntPipe) id) {
-    // valida um parametro id do tipo numérico
-    return { id };
+    return await this.userService.delete(id);
   }
 }
