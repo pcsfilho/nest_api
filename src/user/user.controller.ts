@@ -15,6 +15,7 @@ import { UpdateUserDTO } from "./dto/update-user.dto";
 import { UpdatePatchUserDTO } from "./dto/update-patch-user.dto";
 import { UserService } from "./user.service";
 import { LogInterceptor } from "src/interceptors/log.interceptor";
+import { ParamId } from "src/decorators/param-id.decorator";
 
 @Controller("users") // rota /users
 export class UserController {
@@ -31,25 +32,22 @@ export class UserController {
   }
 
   @Get(":id")
-  async show(@Param("id", ParseIntPipe) id) {
+  async show(@ParamId() id: number) {
     return await this.userService.show(id);
   }
 
   @Put(":id")
-  async update(@Body() data: UpdateUserDTO, @Param("id", ParseIntPipe) id) {
+  async update(@Body() data: UpdateUserDTO, @ParamId() id: number) {
     return await this.userService.update(id, data);
   }
 
   @Patch(":id")
-  async updatePartial(
-    @Body() data: UpdatePatchUserDTO,
-    @Param("id", ParseIntPipe) id
-  ) {
+  async updatePartial(@Body() data: UpdatePatchUserDTO, @ParamId() id: number) {
     return await this.userService.updatePartial(id, data);
   }
 
   @Delete(":id")
-  async delete(@Param("id", ParseIntPipe) id) {
+  async delete(@ParamId() id: number) {
     return await this.userService.delete(id);
   }
 }
